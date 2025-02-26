@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
@@ -13,7 +14,7 @@ class CategoryController extends Controller
     {
         $request->validate([
             'category_name' => 'required|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:1048576',  // Validate image
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:1048576',  // Validate image
         ]);
 
         // Store the uploaded image
@@ -62,6 +63,9 @@ class CategoryController extends Controller
         // Delete the category record from the database
         $category->delete();
 
+        // Reset the auto-increment value (set it to the highest current id + 1)
+        DB::statement('ALTER TABLE categories AUTO_INCREMENT = (SELECT MAX(id) FROM categories) + 1');
+
         return response()->json(['message' => 'Category deleted successfully']);
     }
 
@@ -71,13 +75,13 @@ class CategoryController extends Controller
         $category = Category::find($id);
 
         if (!$category) {
-            return response()->json(['message' => 'Category not found'], 404);  // Return 404 if category is not found
+            return response()->json(['message' => 'Category not found'], 404);
         }
 
         // Validate incoming request (image is optional for update)
         $request->validate([
             'category_name' => 'nullable|string',  // category_name is optional for update
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // Image is optional for update
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',  // Image is optional for update
         ]);
 
         // If a new image is uploaded, handle the uploaded image file and update the category

@@ -155,4 +155,38 @@ class ProductController extends Controller
 
         return response()->json($product);
     }
+    public function index()
+    {
+        // Fetch all products from the database
+        $products = Product::all();
+
+        // Return the products as a JSON response
+        return response()->json($products);
+    }
+      // Get product by ID
+      public function show($id)
+      {
+          $product = Product::find($id);
+  
+          if (!$product) {
+              return response()->json(['message' => 'Product not found'], 404);
+          }
+  
+          return response()->json($product);
+      }
+          // Delete a product
+    public function destroy($id)
+    {
+        $product = Product::find($id);
+
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+
+        // Delete the product
+        $product->delete();
+
+        return response()->json(['message' => 'Product deleted successfully']);
+    }
+
 }
