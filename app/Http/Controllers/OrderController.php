@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use App\Models\Order;
@@ -83,5 +82,25 @@ class OrderController extends Controller
         $order->save();
 
         return response()->json($order);
+    }
+
+    // Delete an order by orderId
+    public function destroy($orderId)
+    {
+        $order = Order::where('orderId', $orderId)->first();
+
+        if (!$order) {
+            return response()->json(['message' => 'Order not found'], 404);  // Return 404 if order not found
+        }
+
+        // If the order has an image, delete it from storage
+        if ($order->image) {
+            Storage::disk('public')->delete($order->image);
+        }
+
+        // Delete the order from the database
+        $order->delete();
+
+        return response()->json(['message' => 'Order deleted successfully']);
     }
 }

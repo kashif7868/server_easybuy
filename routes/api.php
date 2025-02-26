@@ -70,3 +70,4 @@ Route::post('order', [OrderController::class, 'store']);  // Create Order
 Route::get('orders', [OrderController::class, 'index']);  // Get All Orders
 Route::get('order/{orderId}', [OrderController::class, 'show']);  // Get Order by OrderId
 Route::patch('order/{orderId}/status', [OrderController::class, 'updateStatus']); 
+Route::delete('order/{orderId}', [OrderController::class, 'destroy']);
