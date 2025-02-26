@@ -4,18 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;  // Import the Request class
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRegisterRequest;
 use App\Models\User;  // Assuming you are using the User model
 use Illuminate\Support\Facades\Auth;
 
+
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function register(UserRegisterRequest $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|string|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
+        $validatedData = $request->validated();
 
         $user = User::create([
             'name' => $validatedData['name'],
