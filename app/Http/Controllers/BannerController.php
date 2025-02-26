@@ -13,7 +13,7 @@ class BannerController extends Controller
     {
         // Validate incoming request
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // File validation
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:1048576',  // File validation
             'category_name' => 'required|string',
             'subcategory_name' => 'required|string',
             'category_id' => 'required|integer',

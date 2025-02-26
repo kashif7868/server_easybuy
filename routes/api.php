@@ -17,12 +17,14 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('users', [AuthController::class, 'getAllUsers']);
     Route::get('users/{id}', [AuthController::class, 'getUserById']);
     Route::delete('users/{id}', [AuthController::class, 'deleteUser']);
+    
 });
 
 Route::middleware(['auth:api'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::post('me', [AuthController::class, 'me']);
+    Route::patch('user/update', [AuthController::class, 'updateUser']);
 });
 
 // Slider Routes 

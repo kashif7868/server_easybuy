@@ -20,7 +20,7 @@ class OrderController extends Controller
             'subtotal' => 'required|numeric',
             'deliveryCharges' => 'required|numeric',
             'grandTotal' => 'required|numeric',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validate the image
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:1048576', // Validate the image
         ]);
 
         // Handle image upload if provided

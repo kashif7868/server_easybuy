@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;  // Import the Request class
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRegisterRequest;
-use App\Models\User;  // Assuming you are using the User model
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -22,7 +22,7 @@ class AuthController extends Controller
         ]);
 
         $token = auth('api')->login($user);
-        return $this->respondWithToken($token);
+        return $this->respondWithToken($token, $user);
     }
 
     public function login()
@@ -33,7 +33,8 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        return $this->respondWithToken($token);
+        $user = auth('api')->user();
+        return $this->respondWithToken($token, $user);
     }
 
     public function me()
@@ -49,15 +50,33 @@ class AuthController extends Controller
 
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
+        $user = auth('api')->user();
+        return $this->respondWithToken(auth()->refresh(), $user);
     }
 
-    protected function respondWithToken($token)
+    protected function respondWithToken($token, $user)
     {
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 60
+            'user' => [
+                'image' => null,
+                'role' => 'user',
+                'fullName' => $user->name,
+                'email' => $user->email,
+                'password' => $user->password,
+                'id' => (string) $user->id
+            ],
+            'tokens' => [
+                'access' => [
+                    'token' => $token,
+                    'expires' => now()->addMinutes(auth('api')->factory()->getTTL())->toIso8601String(),
+                    'uuid' => (string) Str::uuid()
+                ],
+                'refresh' => [
+                    'token' => auth('api')->refresh(),
+                    'expires' => now()->addMinutes(auth('api')->factory()->getTTL() * 2)->toIso8601String(),
+                    'uuid' => (string) Str::uuid()
+                ]
+            ]
         ]);
     }
 

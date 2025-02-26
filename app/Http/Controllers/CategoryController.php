@@ -13,7 +13,7 @@ class CategoryController extends Controller
     {
         $request->validate([
             'category_name' => 'required|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // Validate image
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:1048576',  // Validate image
         ]);
 
         // Store the uploaded image

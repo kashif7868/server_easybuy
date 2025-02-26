@@ -12,7 +12,7 @@ class SliderController extends Controller
     {
         // Validate the incoming request with file validation
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // Validate file type and size
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:1048576',  
         ]);
 
         // Handle the uploaded image file

@@ -87,9 +87,9 @@ class ProductController extends Controller
             'rating' => 'nullable|integer',
             'reviews' => 'nullable|integer',
             'description' => 'nullable|string',
-            'images' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // Main image
+            'images' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:1048576',  // Main image
             'additional_images' => 'nullable|array',  // Additional images
-            'additional_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // Validate additional images
+            'additional_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:1048576',  // Validate additional images
             'color' => 'nullable|string',
             'brand' => 'nullable|string',
             'meter' => 'nullable|numeric',
