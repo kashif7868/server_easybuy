@@ -27,11 +27,19 @@ class Product extends Model
         'category_id',
         'subcategory_id',
         'small_category_id',
+        'featured',  // Featured product
+        'deal_of_the_day',  // Deal of the Day product
+        'best_seller',  // Best Seller product
+        'top_offer_product',  // Top Offer product
     ];
 
     protected $casts = [
         'images' => 'array',  // Main image as an array
         'additional_images' => 'array',  // Additional images as an array
+        'featured' => 'boolean',  // Featured product
+        'deal_of_the_day' => 'boolean',  // Deal of the Day product
+        'best_seller' => 'boolean',  // Best Seller product
+        'top_offer_product' => 'boolean',  // Top Offer product
     ];
 
     // Define the relationship with the Category model

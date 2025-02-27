@@ -1,6 +1,5 @@
 <?php
 
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -28,6 +27,10 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('category_id');  // Foreign key for category
             $table->unsignedBigInteger('subcategory_id');  // Foreign key for subcategory
             $table->unsignedBigInteger('small_category_id');  // Foreign key for small category
+            $table->boolean('featured')->default(false);  // Featured product (default false)
+            $table->boolean('deal_of_the_day')->default(false);  // Deal of the Day product (default false)
+            $table->boolean('best_seller')->default(false);  // Best Seller product (default false)
+            $table->boolean('top_offer_product')->default(false);  // Top Offer product (default false)
             $table->timestamps();
 
             // Add foreign key constraints
