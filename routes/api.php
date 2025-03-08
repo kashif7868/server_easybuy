@@ -10,7 +10,7 @@ use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\SmallCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
-
+use App\Http\Controllers\ContactController;
 Route::group(['prefix' => 'auth'], function () {
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
@@ -73,3 +73,10 @@ Route::get('orders', [OrderController::class, 'index']);  // Get All Orders
 Route::get('order/{orderId}', [OrderController::class, 'show']);  // Get Order by OrderId
 Route::patch('order/{orderId}/status', [OrderController::class, 'updateStatus']); 
 Route::delete('order/{orderId}', [OrderController::class, 'destroy']);
+
+// Contact Routes
+Route::post('contact', [ContactController::class, 'store']);  
+Route::get('contacts', [ContactController::class, 'index']);  
+Route::get('contact/{id}', [ContactController::class, 'show']);  
+Route::patch('contact/{id}', [ContactController::class, 'update']);  
+Route::delete('contact/{id}', [ContactController::class, 'destroy']);
