@@ -88,52 +88,59 @@ class AuthController extends Controller
     }
 
     // Profile Update (including image update)
-    public function updateUser(Request $request)
-    {
-        $user = auth()->user();
+   // Profile Update (including image update) using PATCH
+public function updateUser(Request $request, $id)
+{
+    // Find the user by ID
+    $user = User::find($id);
 
-        // Validation for profile data
-        $validatedData = $request->validate([
-            'name' => 'nullable|string|max:255',
-            'email' => 'nullable|email|unique:users,email,' . $user->id,
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:1048576', // Image validation
-        ]);
-
-        // Update name and email if provided
-        if ($request->has('name')) {
-            $user->name = $validatedData['name'];
-        }
-        if ($request->has('email')) {
-            $user->email = $validatedData['email'];
-        }
-
-        // Handle image upload if present
-        if ($request->hasFile('image')) {
-            // Delete the old image if it exists
-            if ($user->image) {
-                $oldImagePath = storage_path('app/public/' . $user->image);
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath); // Delete old image
-                }
-            }
-
-            // Store the new image
-            $imagePath = $request->file('image')->store('users', 'public');
-            $user->image = $imagePath;
-        }
-
-        // Save the updated user
-        $user->save();
-
-        return response()->json([
-            'message' => 'Profile updated successfully',
-            'user' => [
-                'name' => $user->name,
-                'email' => $user->email,
-                'image' => $user->image ? asset('storage/' . $user->image) : null, // Return the updated image URL
-            ]
-        ]);
+    if (!$user) {
+        return response()->json(['message' => 'User not found'], 404);
     }
+
+    // Validation for profile data
+    $validatedData = $request->validate([
+        'name' => 'nullable|string|max:255',
+        'email' => 'nullable|email|unique:users,email,' . $user->id,
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:1048576', // Image validation
+    ]);
+
+    // Update name and email if provided
+    if ($request->has('name')) {
+        $user->name = $validatedData['name'];
+    }
+    if ($request->has('email')) {
+        $user->email = $validatedData['email'];
+    }
+
+    // Handle image upload if present
+    if ($request->hasFile('image')) {
+        // Delete the old image if it exists
+        if ($user->image) {
+            $oldImagePath = storage_path('app/public/' . $user->image);
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath); // Delete old image
+            }
+        }
+
+        // Store the new image
+        $imagePath = $request->file('image')->store('users', 'public');
+        $user->image = $imagePath;
+    }
+
+    // Save the updated user
+    $user->save();
+
+    return response()->json([
+        'message' => 'Profile updated successfully',
+        'user' => [
+            'name' => $user->name,
+            'email' => $user->email,
+            'image' => $user->image ? asset('storage/' . $user->image) : null, // Return the updated image URL
+        ]
+    ]);
+}
+
 
     // Get all users
     public function getAllUsers()

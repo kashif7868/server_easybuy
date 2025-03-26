@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -11,6 +10,8 @@ use App\Http\Controllers\SmallCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ContactController;
+
+// Auth Routes
 Route::group(['prefix' => 'auth'], function () {
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
@@ -18,13 +19,14 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('users/{id}', [AuthController::class, 'getUserById']);
     Route::delete('users/{id}', [AuthController::class, 'deleteUser']);
     
+    // Update Profile (PATCH method)
+    Route::patch('user/update-profile/{id}', [AuthController::class, 'updateUser']);
 });
 
 Route::middleware(['auth:api'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::post('me', [AuthController::class, 'me']);
-    Route::patch('user/update', [AuthController::class, 'updateUser']);
 });
 
 // Slider Routes 
@@ -40,6 +42,7 @@ Route::get('banners', [BannerController::class, 'index']);
 Route::get('banner/{id}', [BannerController::class, 'show']);
 Route::patch('banner/{id}', [BannerController::class, 'update']);
 Route::delete('banner/{id}', [BannerController::class, 'destroy']);
+
 // Category Routes
 Route::post('category', [CategoryController::class, 'store']);
 Route::get('categories', [CategoryController::class, 'index']);
@@ -53,6 +56,7 @@ Route::get('subcategories', [SubcategoryController::class, 'index']);
 Route::get('subcategory/{id}', [SubcategoryController::class, 'show']);
 Route::patch('subcategory/{id}', [SubcategoryController::class, 'update']);
 Route::delete('subcategory/{id}', [SubcategoryController::class, 'destroy']);
+
 // Small Category Routes
 Route::post('small-category', [SmallCategoryController::class, 'store']);
 Route::get('small-categories', [SmallCategoryController::class, 'index']);
