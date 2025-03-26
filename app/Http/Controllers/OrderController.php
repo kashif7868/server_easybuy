@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Order;
@@ -102,5 +101,23 @@ class OrderController extends Controller
         $order->delete();
 
         return response()->json(['message' => 'Order deleted successfully']);
+    }
+
+    // Get metrics (customers count, orders count, total sales)
+    public function metrics()
+    {
+        // Count unique customers based on email or another unique identifier (adjust this as needed)
+        $customersCount = Order::distinct('userDetails->email')->count(); // Assuming email is part of userDetails
+        // Count total orders
+        $ordersCount = Order::count();
+        // Sum of all grand totals
+        $totalSales = Order::sum('grandTotal');
+
+        return response()->json([
+            'customersCount' => $customersCount,
+            'ordersCount' => $ordersCount,
+            'totalSales' => $totalSales,
+            'status' => 'idle', // Default status, adjust if needed
+        ]);
     }
 }
